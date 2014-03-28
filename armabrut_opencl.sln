@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "armabrut_opencl", "armabrut_opencl\armabrut_opencl.vcxproj", "{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DLL|Win32 = DLL|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.Debug|Win32.ActiveCfg = Debug|Win32
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.Debug|Win32.Build.0 = Debug|Win32
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.DLL|Win32.ActiveCfg = DLL|Win32
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.DLL|Win32.Build.0 = DLL|Win32
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.Release|Win32.ActiveCfg = Release|Win32
+		{25DC6D13-E2A6-4C2E-B5D2-FC05D9E11666}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
