@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CYCLE_STEP_02 (0x10000FE)
 
 //kernel names for different algos
-const char algKernels[2][10] = {"arma_alg0","arma_alg1"};
+const char algKernels[8][10] = {"arma_alg0","arma_alg1", "arma_alg2", "arma_alg3", "arma_alg4", "arma_alg5", "arma_alg6", "arma_alg7"};
 
 PRINT_ERROR  errorCallback;
 int* stopBrute;
@@ -52,6 +52,7 @@ cl_uint* out_hashes;
 cl_uint* out_keys;
 cl_uint* in_hashes;
 unsigned int salt;
+unsigned int seed;
 cl_uint num_keys_found;
 cl_mem inBuf;
 cl_mem outHashesBuf;
@@ -95,9 +96,10 @@ inline void checkErr(cl_int status, char* msg, ...)
 }
 
 //mem alloc and variable setting etc. needs to be run once per session only
-int initializeHost(unsigned long param)
+int initializeHost(unsigned long* param)
 {
-    salt = param;
+    salt = param[0];
+    seed = param[1];
     num_keys_found = 0;
     out_hashes = NULL;
     out_keys = NULL;
@@ -249,7 +251,7 @@ int initializeCL(int alg)
     }
 
     //building kernel: load *.cl, create program object, create kernel objects
-    const char* filename  = "Z:\\__cracking\\armabrut_mod\\armabrut\\brute_opencl.cl";
+    //const char* filename  = "Z:\\__dev\\armabrut_opencl\\armabrut_opencl\\brute_opencl.cl";
     std::ifstream kernelFile("brute_opencl.cl", std::ios::in);
     if (!kernelFile.is_open())
     {
@@ -380,6 +382,14 @@ int runCL(int alg, unsigned int cycle_offset)
     if(alg==1) {
         //alg1 so we need salt
         status = clSetKernelArg(kernel, 5,sizeof(cl_uint), (void *)&salt);
+        if(status != CL_SUCCESS)
+        {
+            checkErr(status, "Setting kernel argument salt");
+            return CL_FALSE;
+        }
+    } else if(alg==7) {
+        //alg7 so we need seed
+        status = clSetKernelArg(kernel, 5,sizeof(cl_uint), (void *)&seed);
         if(status != CL_SUCCESS)
         {
             checkErr(status, "Setting kernel argument salt");
@@ -593,7 +603,7 @@ void arma_do_brute(int alg, hash_list* list, unsigned long from, unsigned long t
     checkErr(CL_SUCCESS,"Cycles needed: %d",cyc_need);
 
     int status = 0;
-    if(initializeHost(*param) != CL_TRUE) {
+    if(initializeHost(param) != CL_TRUE) {
         status--;
         checkErr(status,"Initializing Host");
         return;
