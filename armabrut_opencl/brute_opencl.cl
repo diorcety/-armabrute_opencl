@@ -205,9 +205,15 @@ __kernel void arma_alg7(__global unsigned int* out_hashes, __global unsigned int
 }
 
 //stolen keys 7.4+
-/*
-static void alg8(unsigned int seed)
+__kernel void arma_alg8(__global unsigned int* out_hashes, __global unsigned int* out_keys, __global unsigned int* in_hashes, const unsigned int from, __global unsigned int* num_keys_found, const unsigned int seed, const unsigned int salt)
 {
-    int seed_=arma_alg78_hash(seed);
-    print_if_found(GenerateChecksumV8(seed_, g_salt), seed_);
-}*/
+    unsigned int idx = get_global_id(0);
+    int key = arma_alg78_hash(from+idx, seed);
+    unsigned int chkSum = GenerateChecksumV8(key, salt);
+
+    if(chkSum==in_hashes[0]) {
+        unsigned int num_key = atomic_inc(num_keys_found);
+        out_hashes[num_key] = in_hashes[0];
+        out_keys[num_key] = key;
+    }
+}

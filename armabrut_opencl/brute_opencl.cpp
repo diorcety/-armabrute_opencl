@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CYCLE_STEP_02 (0x10000FE)
 
 //kernel names for different algos
-const char algKernels[8][10] = {"arma_alg0","arma_alg1", "arma_alg2", "arma_alg3", "arma_alg4", "arma_alg5", "arma_alg6", "arma_alg7"};
+const char algKernels[9][10] = {"arma_alg0","arma_alg1", "arma_alg2", "arma_alg3", "arma_alg4", "arma_alg5", "arma_alg6", "arma_alg7", "arma_alg8"};
 
 PRINT_ERROR  errorCallback;
 int* stopBrute;
@@ -387,9 +387,19 @@ int runCL(int alg, unsigned int cycle_offset)
             checkErr(status, "Setting kernel argument salt");
             return CL_FALSE;
         }
-    } else if(alg==7) {
-        //alg7 so we need seed
+    } else if(alg==7 || alg==8) {
+        //alg7/8 so we need seed
         status = clSetKernelArg(kernel, 5,sizeof(cl_uint), (void *)&seed);
+        if(status != CL_SUCCESS)
+        {
+            checkErr(status, "Setting kernel argument salt");
+            return CL_FALSE;
+        }
+    }
+
+    if(alg==8) {
+        //alg8 so we need salt
+        status = clSetKernelArg(kernel, 6,sizeof(cl_uint), (void *)&salt);
         if(status != CL_SUCCESS)
         {
             checkErr(status, "Setting kernel argument salt");
