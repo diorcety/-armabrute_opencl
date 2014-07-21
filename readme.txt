@@ -9,15 +9,24 @@ You need to put brute_opencl.cl  in same directory as .exe/.dll
 
 Also you are able pause brute by spacebar pressed in the console
 
+This can also be used as a dll plugin for ArmadilloKeytool by mr.exodia
 
-Note: 
-Only alg 0,1,3,4 are supported !
+Note on -a param:
+0: arma v3.7-v7.2
+1: arma v7.4+
+2: some crc32+random number (maybe arma <v3.x)
+3,4: 1 and 2 with layer 2 verification of the sym, ignore this
+(5: arma random dword seed) not yet supported
+(6: arma random dword) not yet supported
+7: stolen keys v3.7-v7.2
+8: stolen keys 7.4+
 
 Sample Usage:
 armabrut_opencl.exe -a 0 -h 0765D867    -> result should be A7762CB7 in few seconds
 armabrut_opencl.exe -a 0 -h 0765D867 -f A7762BB6 -t A8762CB4
 armabrut_opencl.exe -a 1 -h 132391AE -p 6CA2B2C9 -o keys.txt
 armabrut_opencl.exe -a 1 -h 4B3602BA,0A9EAB25 -p CD336B24 -o keys.txt
+armabrut_opencl.exe -a 7 -h 9443B5D9 -d 434220C8 -> result should be 132669B8 in few seconds
 
 Benchmark:
 armabrut_opencl.exe -a 1 -h 132391AE -p 6CA2B2C9
