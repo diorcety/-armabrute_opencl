@@ -4,8 +4,7 @@
 
 armabrut_opencl requires ATI/Nvidia GPU or any CPU that at least supports OpenCL 1.1. 
 For Radeon, all 5xxx, 6xxx, 7xxx are supported. No 4xxx !
-You also need to have OpenCL Runtime for your card installed or it will fallback to CPU !
-You need to put brute_opencl.cl  in same directory as .exe/.dll
+You also need to have OpenCL Runtime for your card installed.
 
 Also you are able pause brute by spacebar pressed in the console
 
