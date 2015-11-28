@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include <sstream>
 #include <CL\cl.h>
+#include <Windows.h>
 
 #define MAX_OUT_KEYS (16384-1)
 // HD5870/6870 runs fine with FF0FF. Seems to be max before display driver dies for ATI
@@ -271,7 +272,18 @@ int initializeCL(int alg)
 
     //building kernel: load *.cl, create program object, create kernel objects
     //const char* filename  = "Z:\\__dev\\armabrut_opencl\\armabrut_opencl\\brute_opencl.cl";
-    std::ifstream kernelFile("brute_opencl.cl", std::ios::in);
+    char modPath[MAX_PATH];
+    char kernelPath[MAX_PATH];
+    HMODULE hm = NULL;
+    if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR) &initializeCL, &hm))
+    {
+        checkErr(-1, "GetModuleHandle failed");
+    }
+    GetModuleFileNameA(hm, modPath, sizeof(modPath));
+    strncpy(kernelPath, modPath, strlen(modPath)-14);
+    strcat(kernelPath, "\\brute_opencl.cl");
+    // the above trickery is needed if used as DLL with AKT tool as it changes working directory
+    std::ifstream kernelFile(kernelPath, std::ios::in);
     if (!kernelFile.is_open())
     {
         checkErr(-1,"Opening brute_opencl.cl");
