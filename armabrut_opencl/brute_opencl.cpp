@@ -91,7 +91,16 @@ inline void checkErr(cl_int status, char* msg, ...)
         strcat(buf, " failed\n");
         vsprintf(bufFormatted, buf, argptr);
         errorCallback(bufFormatted);
+    } else {
+#ifdef DEBUG
+        strcpy(buf, "INFO: ");
+        strcat(buf, msg);
+        strcat(buf, "\n");
+        vsprintf(bufFormatted, buf, argptr);
+        errorCallback(bufFormatted);
+#endif
     }
+
 #endif
 }
 
