@@ -54,6 +54,8 @@ GTX580:
 estimated 46.18 min, speed 1539609 hash/sec (CUDA estimated 69.75 min, speed 1022830 hash/sec)
 GTX580(Overclock):
 estimated 36.12 min, speed 1973388 hash/sec (CUDA estimated 57.14 min, speed 1247369 hash/sec)
+GTX680:
+estimated 29min, speed 2350654 hash/sec
 GTX770:
 estimated 32.35 min, speed 2167825 hash/sec (CUDA estimated 36.18 min, speed 1941114 hash/sec)
 
