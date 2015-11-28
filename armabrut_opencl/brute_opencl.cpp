@@ -143,8 +143,10 @@ int initializeCL(int alg)
     size_t tempSize = 0;
     cl_uint numPlatforms = 0;
     cl_platform_id platform = NULL;
+    cl_device_id device = NULL;
+    bool gpuFound = false;
 
-    //get suitable platform: GPU or fallback to CPU
+    //get suitable device: GPU
     status = clGetPlatformIDs(0, NULL, &numPlatforms);
     if(status != CL_SUCCESS) {
         checkErr(status,"Getting Platforms");
@@ -159,27 +161,28 @@ int initializeCL(int alg)
             return CL_FALSE;
         }
         for(unsigned int i=0; i < numPlatforms; ++i) {
-            char pbuff[100];
-            status = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR, sizeof(pbuff), pbuff, NULL);
-            if(status != CL_SUCCESS) {
-                checkErr(status,"Getting Platform Info");
-                return CL_FALSE;
-            }
             platform = platforms[i];
-            if(!strcmp(pbuff, "Advanced Micro Devices, Inc.") || !strcmp(pbuff,"NVIDIA Corporation")) {
-                //we found AMD or NVIDIA GPU
-                break;
+            status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+            if(status == CL_SUCCESS) {
+                gpuFound = true;
+                break; //we found a GPU device
             }
         }
         delete platforms;
     }
 
     if(NULL == platform) {
-        checkErr(status,"NULL platform found");
+        checkErr(-1,"NULL platform found");
+        return CL_FALSE;
+    }
+
+    if(!gpuFound) {
+        checkErr(-1,"No GPU device found");
         return CL_FALSE;
     }
 
     //create context
+    /*
     cl_context_properties cps[3] = { CL_CONTEXT_PLATFORM, (cl_context_properties)platform, 0 };
     context = clCreateContextFromType(cps, CL_DEVICE_TYPE_GPU, NULL,  NULL, &status);
     if(status != CL_SUCCESS) {
@@ -193,6 +196,13 @@ int initializeCL(int alg)
         checkErr(status,"Using CPU");
     } else {
         checkErr(status,"Using GPU");
+    }*/
+
+    context = clCreateContext(NULL, 1, &device, NULL, NULL, &status);
+    if(status != CL_SUCCESS) {
+        char buf[20];
+        sprintf(buf, "Creating GPU Context %d", status);
+        return CL_FALSE;
     }
 
     //query context for device list
