@@ -286,7 +286,7 @@ int initializeCL(int alg)
     std::ifstream kernelFile(kernelPath, std::ios::in);
     if (!kernelFile.is_open())
     {
-        checkErr(-1,"Opening brute_opencl.cl");
+        checkErr(-1,kernelPath);
         return CL_FALSE;
     }
 
