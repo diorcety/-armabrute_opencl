@@ -272,8 +272,8 @@ int initializeCL(int alg)
 
     //building kernel: load *.cl, create program object, create kernel objects
     //const char* filename  = "Z:\\__dev\\armabrut_opencl\\armabrut_opencl\\brute_opencl.cl";
-    char modPath[MAX_PATH];
-    char kernelPath[MAX_PATH];
+    char modPath[MAX_PATH] = {};
+    char kernelPath[MAX_PATH] = {};
     HMODULE hm = NULL;
     if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR) &initializeCL, &hm))
     {
