@@ -40,6 +40,8 @@ HD6870:
 estimated 128.22 min, speed 557192 hash/sec
 HD7970:
 estimated 13.5 min, speed 5276297 hash/sec
+R9 285
+estimated 20min, speed 3750000 hash/sec
 
 NVIDIA
 -------
