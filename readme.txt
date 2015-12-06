@@ -59,6 +59,8 @@ GTX680:
 estimated 29min, speed 2350654 hash/sec
 GTX770:
 estimated 32.35 min, speed 2167825 hash/sec (CUDA estimated 36.18 min, speed 1941114 hash/sec)
+GTX 780m
+estimated 50min, speed 1359757 hash/sec
 
 Troubleshooting:
 If it doesnt run for you, run as Debug which outputs some more info.
