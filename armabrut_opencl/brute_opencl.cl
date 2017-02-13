@@ -217,3 +217,30 @@ __kernel void arma_alg8(__global unsigned int* out_hashes, __global unsigned int
         out_keys[num_key] = key;
     }
 }
+
+__kernel void arma_alg9(__global unsigned int* out_hashes, __global unsigned int* out_keys, __global unsigned int* in_hashes, const unsigned int from, __global unsigned int* num_keys_found, const unsigned int seed, const unsigned int salt)
+{
+    unsigned int idx = get_global_id(0);
+    int key = arma_alg78_hash(from+idx, seed);
+    unsigned int chkSum = GenerateChecksumV8(key, salt);
+
+    if(chkSum==in_hashes[0]) {
+        unsigned int num_key = atomic_inc(num_keys_found);
+        out_hashes[num_key] = from+idx;
+        out_keys[num_key] = key;
+    }
+}
+
+__kernel void arma_alg10(__global unsigned int* out_hashes, __global unsigned int* out_keys, __global unsigned int* in_hashes, const unsigned int from, __global unsigned int* num_keys_found, const unsigned int seed, const unsigned int salt)
+{
+    unsigned int idx = get_global_id(0);
+    int next=from+idx;
+    next=arma_alg2_next(next);
+    next=arma_alg2_next(next);
+
+    if(next==in_hashes[0]) {
+        unsigned int num_key = atomic_inc(num_keys_found);
+        out_hashes[num_key] = from+idx;
+        out_keys[num_key] = next;
+    }
+}

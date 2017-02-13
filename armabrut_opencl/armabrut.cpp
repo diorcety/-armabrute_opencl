@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
         }
         fclose(pFile);
     }
-    else if(alg==7||alg==8)
+    else if(alg==7||alg==8||alg==9||alg==10)
     {
         char* pdata=getarg("-d", argc, argv);
         if(!pdata)

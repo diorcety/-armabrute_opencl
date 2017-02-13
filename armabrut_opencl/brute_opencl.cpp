@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CYCLE_STEP_02 (0x10000FE)
 
 //kernel names for different algos
-const char algKernels[9][10] = {"arma_alg0","arma_alg1", "arma_alg2", "arma_alg3", "arma_alg4", "arma_alg5", "arma_alg6", "arma_alg7", "arma_alg8"};
+const char algKernels[][11] = {"arma_alg0","arma_alg1", "arma_alg2", "arma_alg3", "arma_alg4", "arma_alg5", "arma_alg6", "arma_alg7", "arma_alg8", "arma_alg9", "arma_alg10"};
 
 PRINT_ERROR  errorCallback;
 int* stopBrute;
@@ -418,7 +418,7 @@ int runCL(int alg, unsigned int cycle_offset)
             checkErr(status, "Setting kernel argument salt");
             return CL_FALSE;
         }
-    } else if(alg==7 || alg==8) {
+    } else if(alg==7 || alg==8 || alg==9 || alg==10) {
         //alg7/8 so we need seed
         status = clSetKernelArg(kernel, 5,sizeof(cl_uint), (void *)&seed);
         if(status != CL_SUCCESS)
@@ -428,7 +428,7 @@ int runCL(int alg, unsigned int cycle_offset)
         }
     }
 
-    if(alg==8) {
+    if(alg==8 || alg==9 || alg==10) {
         //alg8 so we need salt
         status = clSetKernelArg(kernel, 6,sizeof(cl_uint), (void *)&salt);
         if(status != CL_SUCCESS)
@@ -446,7 +446,7 @@ int runCL(int alg, unsigned int cycle_offset)
       - CL_DEVICE_MAX_WORK_ITEM_SIZES: triplet of max items per dimension. And triplet multiplied <= CL_DEVICE_MAX_WORK_GROUP_SIZE and CL_KERNEL_WORK_GROUP_SIZE
       - And let every work item do 1 hash computation.
     */
-    globalThreads[0] = (alg == 1 || alg==8) ? CYCLE_STEP_1 : CYCLE_STEP_02; //total number of hashes per cycle
+    globalThreads[0] = (alg == 1 || alg==8 || alg==9 || alg==10) ? CYCLE_STEP_1 : CYCLE_STEP_02; //total number of hashes per cycle
     localThreads[0]  = 0xFF;//255 hashes per compute unit (256 would be max)
 
     //sanity checks, in case we go nuts on the values
@@ -633,7 +633,7 @@ void arma_do_brute(int alg, hash_list* list, unsigned long from, unsigned long t
     errorCallback = print_error;
 
     unsigned int num_done = 0;
-    unsigned int cyc_step = (alg == 1 || alg==8) ? CYCLE_STEP_1 : CYCLE_STEP_02;
+    unsigned int cyc_step = (alg == 1 || alg==8 || alg==9 || alg==10) ? CYCLE_STEP_1 : CYCLE_STEP_02;
     unsigned int cyc_need = (to/cyc_step) - (from/cyc_step);
 
     if((to-from)<cyc_step) {
