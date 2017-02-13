@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <CL\cl.h>
+#include <CL/cl.h>
 #include <Windows.h>
 
 #define MAX_OUT_KEYS (16384-1)
@@ -309,7 +309,7 @@ int initializeCL(int alg)
         checkErr(status,"Building Program");
         char buffer[2048];
         clGetProgramBuildInfo(program, *devices, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, NULL);
-        checkErr(CL_SUCCESS,"--- Build log ---\n %s",buffer);
+        checkErr(status,"--- Build log ---\n %s",buffer);
         return CL_FALSE;
     }
 
@@ -376,7 +376,7 @@ int runCL(int alg, unsigned int cycle_offset)
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&outHashesBuf);
     if(status != CL_SUCCESS)
     {
-        checkErr(status, " Setting kernel argument´outHashesBuf");
+        checkErr(status, " Setting kernel argument outHashesBuf");
         return CL_FALSE;
     }
 
